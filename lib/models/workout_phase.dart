@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_colors.dart';
+import '../core/theme/app_palette.dart';
 
 enum WorkoutPhase {
   idle,
@@ -23,35 +23,38 @@ enum WorkoutPhase {
     }
   }
 
-  Color get accentColor {
+  Color accentColorFor(AppPalette palette) {
     switch (this) {
       case WorkoutPhase.idle:
-        return AppColors.textSecondary;
+        return palette.textSecondary;
       case WorkoutPhase.prepare:
-        return AppColors.prepare;
+        return palette.prepare;
       case WorkoutPhase.work:
-        return AppColors.work;
+        return palette.work;
       case WorkoutPhase.rest:
-        return AppColors.rest;
+        return palette.rest;
       case WorkoutPhase.completed:
-        return AppColors.complete;
+        return palette.complete;
     }
   }
 
-  Color get subtleColor {
+  Color subtleColorFor(AppPalette palette) {
     switch (this) {
       case WorkoutPhase.idle:
-        return AppColors.surfaceElevated;
+        return palette.surfaceElevated;
       case WorkoutPhase.prepare:
-        return AppColors.prepareSubtle;
+        return palette.prepareSubtle;
       case WorkoutPhase.work:
-        return AppColors.workSubtle;
+        return palette.workSubtle;
       case WorkoutPhase.rest:
-        return AppColors.restSubtle;
+        return palette.restSubtle;
       case WorkoutPhase.completed:
-        return AppColors.completeSubtle;
+        return palette.completeSubtle;
     }
   }
+
+  Color get accentColor => accentColorFor(AppPalette.carbon);
+  Color get subtleColor => subtleColorFor(AppPalette.carbon);
 
   bool get isInterval => this == WorkoutPhase.work || this == WorkoutPhase.rest;
 }

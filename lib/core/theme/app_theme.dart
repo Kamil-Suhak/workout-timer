@@ -1,57 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'app_colors.dart';
+import 'app_palette.dart';
+import 'app_theme_type.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get darkTheme {
+  static ThemeData buildTheme(AppThemeType type) {
+    final palette = AppPalette.ofType(type);
+    final isDark = palette.brightness == Brightness.dark;
+
     return ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.background,
-      primaryColor: AppColors.actionPrimary,
-      canvasColor: AppColors.surface,
-      cardColor: AppColors.surface,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.actionPrimary,
-        onPrimary: AppColors.actionPrimaryText,
-        surface: AppColors.surface,
-        onSurface: AppColors.textPrimary,
-        error: AppColors.destructive,
+      brightness: palette.brightness,
+      scaffoldBackgroundColor: palette.background,
+      primaryColor: palette.actionPrimary,
+      canvasColor: palette.surface,
+      cardColor: palette.surface,
+      extensions: [palette],
+      colorScheme: ColorScheme(
+        brightness: palette.brightness,
+        primary: palette.actionPrimary,
+        onPrimary: palette.actionPrimaryText,
+        secondary: palette.work,
+        onSecondary: Colors.white,
+        error: const Color(0xFFEF4444),
         onError: Colors.white,
+        surface: palette.surface,
+        onSurface: palette.textPrimary,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.background,
+      appBarTheme: AppBarTheme(
+        backgroundColor: palette.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: palette.textPrimary),
         titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
+          color: palette.textPrimary,
           fontSize: 17,
           fontWeight: FontWeight.w600,
           letterSpacing: -0.2,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light,
-          systemNavigationBarColor: AppColors.background,
-          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          systemNavigationBarColor: palette.background,
+          systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: palette.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 1),
+          side: BorderSide(color: palette.border, width: 1),
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.borderSubtle,
+      dividerTheme: DividerThemeData(
+        color: palette.borderSubtle,
         thickness: 1,
         space: 1,
       ),
     );
   }
+
+  static ThemeData get darkTheme => buildTheme(AppThemeType.carbon);
+  static ThemeData get pastelRoseTheme => buildTheme(AppThemeType.pastelRose);
 }

@@ -48,8 +48,10 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppColors.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: palette.background,
       body: SafeArea(
         child: ListenableBuilder(
           listenable: _controller,
@@ -73,12 +75,15 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                             style: AppTypography.cardCaption.copyWith(
                               letterSpacing: 2.0,
                               fontWeight: FontWeight.w700,
+                              color: palette.textTertiary,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'SET ${state.currentSet} / ${settings.totalSets}',
-                            style: AppTypography.setCounter,
+                            style: AppTypography.setCounter.copyWith(
+                              color: palette.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -88,10 +93,10 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                           const SizedBox(width: 8),
                           IconButton(
                             key: const ValueKey('settings_button'),
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.tune_rounded,
                               size: 20,
-                              color: AppColors.textSecondary,
+                              color: palette.textSecondary,
                             ),
                             onPressed: () => SettingsSheet.show(context, _controller),
                             tooltip: 'Settings & Presets',
@@ -119,7 +124,7 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                   IntervalCard(
                     title: 'Exercise',
                     duration: settings.workDuration,
-                    accentColor: AppColors.work,
+                    accentColor: palette.work,
                     isEnabled: !state.isRunning,
                     onIncrement: () => _controller.adjustWorkDuration(const Duration(seconds: 15)),
                     onDecrement: () => _controller.adjustWorkDuration(const Duration(seconds: -15)),
@@ -128,7 +133,7 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                   IntervalCard(
                     title: 'Rest',
                     duration: settings.restDuration,
-                    accentColor: AppColors.rest,
+                    accentColor: palette.rest,
                     isEnabled: !state.isRunning,
                     onIncrement: () => _controller.adjustRestDuration(const Duration(seconds: 5)),
                     onDecrement: () => _controller.adjustRestDuration(const Duration(seconds: -5)),
@@ -145,12 +150,12 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                           key: const ValueKey('reset_button'),
                           onPressed: _controller.reset,
                           style: IconButton.styleFrom(
-                            backgroundColor: AppColors.surfaceElevated,
-                            foregroundColor: AppColors.textSecondary,
+                            backgroundColor: palette.surfaceElevated,
+                            foregroundColor: palette.textSecondary,
                             minimumSize: const Size(56, 56),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
-                              side: const BorderSide(color: AppColors.border),
+                              side: BorderSide(color: palette.border),
                             ),
                           ),
                           icon: const Icon(Icons.refresh_rounded, size: 22),
@@ -165,12 +170,12 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                           key: const ValueKey('skip_button'),
                           onPressed: _controller.skipToNextPhase,
                           style: IconButton.styleFrom(
-                            backgroundColor: AppColors.surfaceElevated,
-                            foregroundColor: AppColors.textSecondary,
+                            backgroundColor: palette.surfaceElevated,
+                            foregroundColor: palette.textSecondary,
                             minimumSize: const Size(56, 56),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
-                              side: const BorderSide(color: AppColors.border),
+                              side: BorderSide(color: palette.border),
                             ),
                           ),
                           icon: const Icon(Icons.skip_next_rounded, size: 22),
@@ -194,16 +199,16 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                           },
                           style: FilledButton.styleFrom(
                             backgroundColor: state.isRunning && !state.isPaused
-                                ? AppColors.surfaceElevated
-                                : AppColors.actionPrimary,
+                                ? palette.surfaceElevated
+                                : palette.actionPrimary,
                             foregroundColor: state.isRunning && !state.isPaused
-                                ? AppColors.textPrimary
-                                : AppColors.actionPrimaryText,
+                                ? palette.textPrimary
+                                : palette.actionPrimaryText,
                             minimumSize: const Size(double.infinity, 56),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: state.isRunning && !state.isPaused
-                                  ? const BorderSide(color: AppColors.border)
+                                  ? BorderSide(color: palette.border)
                                   : BorderSide.none,
                             ),
                           ),
@@ -216,8 +221,8 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                             style: AppTypography.buttonText.copyWith(
                               letterSpacing: 1.5,
                               color: state.isRunning && !state.isPaused
-                                  ? AppColors.textPrimary
-                                  : AppColors.actionPrimaryText,
+                                  ? palette.textPrimary
+                                  : palette.actionPrimaryText,
                             ),
                           ),
                         ),

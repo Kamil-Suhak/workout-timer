@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controllers/workout_timer_controller.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme_type.dart';
 import '../core/theme/app_typography.dart';
 import '../models/workout_preset.dart';
 
@@ -13,13 +14,15 @@ class SettingsSheet extends StatelessWidget {
   });
 
   static Future<void> show(BuildContext context, WorkoutTimerController controller) {
+    final palette = AppColors.of(context);
+
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: palette.surface,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        side: BorderSide(color: AppColors.border),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        side: BorderSide(color: palette.border),
       ),
       builder: (context) => SettingsSheet(controller: controller),
     );
@@ -30,236 +33,283 @@ class SettingsSheet extends StatelessWidget {
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
+        final palette = AppColors.of(context);
         final settings = controller.settings;
         final isRunning = controller.state.isRunning;
 
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 24,
-            right: 24,
-            top: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Sheet Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'WORKOUT SETTINGS',
-                    style: AppTypography.cardCaption.copyWith(
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w700,
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 24,
+              right: 24,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Drag handle
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: palette.border,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 20, color: AppColors.textSecondary),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Section 1: Presets
-              Text(
-                'PRESETS',
-                style: AppTypography.cardCaption.copyWith(
-                  color: AppColors.textTertiary,
-                  fontWeight: FontWeight.w600,
                 ),
-              ),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: WorkoutPreset.defaultPresets.map((preset) {
-                    final isSelected = settings.workDuration == preset.settings.workDuration &&
-                        settings.restDuration == preset.settings.restDuration &&
-                        settings.totalSets == preset.settings.totalSets;
+                const SizedBox(height: 20),
 
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: ChoiceChip(
-                        label: Text(preset.name),
-                        selected: isSelected,
-                        onSelected: isRunning
-                            ? null
-                            : (_) {
-                                controller.applyPreset(preset);
-                              },
-                        backgroundColor: AppColors.surfaceElevated,
-                        selectedColor: AppColors.actionPrimary,
-                        labelStyle: TextStyle(
-                          color: isSelected ? AppColors.actionPrimaryText : AppColors.textPrimary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                        side: BorderSide(
-                          color: isSelected ? AppColors.actionPrimary : AppColors.border,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        showCheckmark: false,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Section 2: Rounds & Total Sets
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
+                // Sheet Header
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Total Sets',
-                          style: AppTypography.cardTitle,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Number of alternating cycles',
-                          style: AppTypography.cardCaption,
-                        ),
-                      ],
+                    Text(
+                      'WORKOUT SETTINGS',
+                      style: AppTypography.cardCaption.copyWith(
+                        letterSpacing: 2.0,
+                        fontWeight: FontWeight.w700,
+                        color: palette.textTertiary,
+                      ),
                     ),
-                    Row(
-                      children: [
-                        _SmallIconButton(
-                          icon: Icons.remove,
-                          onPressed: !isRunning && settings.totalSets > 1
-                              ? () => controller.adjustTotalSets(-1)
-                              : null,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                          child: Text(
-                            '${settings.totalSets}',
-                            style: AppTypography.timerMedium.copyWith(fontSize: 22),
+                    IconButton(
+                      icon: Icon(Icons.close, size: 20, color: palette.textSecondary),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Section 1: Visual Theme Selector
+                Text(
+                  'APPEARANCE & THEME',
+                  style: AppTypography.cardCaption.copyWith(
+                    color: palette.textTertiary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _ThemeOptionCard(
+                        key: const ValueKey('theme_carbon'),
+                        name: 'Carbon Dark',
+                        isSelected: controller.themeType == AppThemeType.carbon,
+                        previewBg: const Color(0xFF0D0E11),
+                        previewAccent: const Color(0xFFFF5222),
+                        palette: palette,
+                        onTap: () => controller.setTheme(AppThemeType.carbon),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _ThemeOptionCard(
+                        key: const ValueKey('theme_pastel_rose'),
+                        name: 'Pastel Rose',
+                        isSelected: controller.themeType == AppThemeType.pastelRose,
+                        previewBg: const Color(0xFFFAF4F5),
+                        previewAccent: const Color(0xFFD9777F),
+                        palette: palette,
+                        onTap: () => controller.setTheme(AppThemeType.pastelRose),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Section 2: Presets
+                Text(
+                  'PRESETS',
+                  style: AppTypography.cardCaption.copyWith(
+                    color: palette.textTertiary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: WorkoutPreset.defaultPresets.map((preset) {
+                      final isSelected = settings.workDuration == preset.settings.workDuration &&
+                          settings.restDuration == preset.settings.restDuration &&
+                          settings.totalSets == preset.settings.totalSets;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ChoiceChip(
+                          label: Text(preset.name),
+                          selected: isSelected,
+                          onSelected: isRunning
+                              ? null
+                              : (_) {
+                                  controller.applyPreset(preset);
+                                },
+                          backgroundColor: palette.surfaceElevated,
+                          selectedColor: palette.actionPrimary,
+                          labelStyle: TextStyle(
+                            color: isSelected ? palette.actionPrimaryText : palette.textPrimary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
                           ),
+                          side: BorderSide(
+                            color: isSelected ? palette.actionPrimary : palette.border,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          showCheckmark: false,
                         ),
-                        _SmallIconButton(
-                          icon: Icons.add,
-                          onPressed: !isRunning && settings.totalSets < 99
-                              ? () => controller.adjustTotalSets(1)
-                              : null,
-                        ),
-                      ],
-                    ),
-                  ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
-              // Section 3: Preparation Countdown
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Preparation Timer',
-                          style: AppTypography.cardTitle,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Countdown before set 1 begins',
-                          style: AppTypography.cardCaption,
-                        ),
-                      ],
-                    ),
-                    DropdownButton<int>(
-                      value: settings.prepareDuration.inSeconds,
-                      dropdownColor: AppColors.surfaceElevated,
-                      underline: const SizedBox.shrink(),
-                      icon: const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
-                      style: AppTypography.buttonText.copyWith(color: AppColors.textPrimary),
-                      onChanged: isRunning
-                          ? null
-                          : (seconds) {
-                              if (seconds != null) {
-                                controller.setPrepareDuration(Duration(seconds: seconds));
-                              }
-                            },
-                      items: const [
-                        DropdownMenuItem(value: 0, child: Text('Off')),
-                        DropdownMenuItem(value: 3, child: Text('3s')),
-                        DropdownMenuItem(value: 5, child: Text('5s')),
-                        DropdownMenuItem(value: 10, child: Text('10s')),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Section 4: Sound and Haptics Toggles
-              Material(
-                color: AppColors.surfaceElevated,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: const BorderSide(color: AppColors.border),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Column(
+                // Section 3: Rounds & Total Sets
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: palette.surfaceElevated,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: palette.border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SwitchListTile.adaptive(
-                        contentPadding: EdgeInsets.zero,
-                        title: const Text('Sound Cues', style: AppTypography.cardTitle),
-                        subtitle: const Text('Pings and transition chimes', style: AppTypography.cardCaption),
-                        value: settings.soundEnabled,
-                        activeTrackColor: AppColors.actionPrimary,
-                        onChanged: (_) => controller.toggleSound(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total Sets',
+                            style: AppTypography.cardTitle.copyWith(color: palette.textPrimary),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Number of alternating cycles',
+                            style: AppTypography.cardCaption.copyWith(color: palette.textTertiary),
+                          ),
+                        ],
                       ),
-                      const Divider(height: 1),
-                      SwitchListTile.adaptive(
-                        contentPadding: EdgeInsets.zero,
-                        title: const Text('Haptic Feedback', style: AppTypography.cardTitle),
-                        subtitle: const Text('Tactile vibration on transitions', style: AppTypography.cardCaption),
-                        value: settings.vibrationEnabled,
-                        activeTrackColor: AppColors.actionPrimary,
-                        onChanged: (_) => controller.toggleVibration(),
+                      Row(
+                        children: [
+                          _SmallIconButton(
+                            icon: Icons.remove,
+                            palette: palette,
+                            onPressed: !isRunning && settings.totalSets > 1
+                                ? () => controller.adjustTotalSets(-1)
+                                : null,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                            child: Text(
+                              '${settings.totalSets}',
+                              style: AppTypography.timerMedium.copyWith(
+                                fontSize: 22,
+                                color: palette.textPrimary,
+                              ),
+                            ),
+                          ),
+                          _SmallIconButton(
+                            icon: Icons.add,
+                            palette: palette,
+                            onPressed: !isRunning && settings.totalSets < 99
+                                ? () => controller.adjustTotalSets(1)
+                                : null,
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+
+                // Section 4: Preparation Countdown
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: palette.surfaceElevated,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: palette.border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Preparation Timer',
+                            style: AppTypography.cardTitle.copyWith(color: palette.textPrimary),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Countdown before set 1 begins',
+                            style: AppTypography.cardCaption.copyWith(color: palette.textTertiary),
+                          ),
+                        ],
+                      ),
+                      DropdownButton<int>(
+                        value: settings.prepareDuration.inSeconds,
+                        dropdownColor: palette.surfaceElevated,
+                        underline: const SizedBox.shrink(),
+                        icon: Icon(Icons.arrow_drop_down, color: palette.textSecondary),
+                        style: AppTypography.buttonText.copyWith(color: palette.textPrimary),
+                        onChanged: isRunning
+                            ? null
+                            : (seconds) {
+                                if (seconds != null) {
+                                  controller.setPrepareDuration(Duration(seconds: seconds));
+                                }
+                              },
+                        items: const [
+                          DropdownMenuItem(value: 0, child: Text('Off')),
+                          DropdownMenuItem(value: 3, child: Text('3s')),
+                          DropdownMenuItem(value: 5, child: Text('5s')),
+                          DropdownMenuItem(value: 10, child: Text('10s')),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Section 5: Sound and Haptics Toggles
+                Material(
+                  color: palette.surfaceElevated,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: palette.border),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      children: [
+                        SwitchListTile.adaptive(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text('Sound Cues', style: AppTypography.cardTitle.copyWith(color: palette.textPrimary)),
+                          subtitle: Text('Pings and transition chimes', style: AppTypography.cardCaption.copyWith(color: palette.textTertiary)),
+                          value: settings.soundEnabled,
+                          activeTrackColor: palette.actionPrimary,
+                          onChanged: (_) => controller.toggleSound(),
+                        ),
+                        Divider(height: 1, color: palette.borderSubtle),
+                        SwitchListTile.adaptive(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text('Haptic Feedback', style: AppTypography.cardTitle.copyWith(color: palette.textPrimary)),
+                          subtitle: Text('Tactile vibration on transitions', style: AppTypography.cardCaption.copyWith(color: palette.textTertiary)),
+                          value: settings.vibrationEnabled,
+                          activeTrackColor: palette.actionPrimary,
+                          onChanged: (_) => controller.toggleVibration(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -267,12 +317,95 @@ class SettingsSheet extends StatelessWidget {
   }
 }
 
+class _ThemeOptionCard extends StatelessWidget {
+  final String name;
+  final bool isSelected;
+  final Color previewBg;
+  final Color previewAccent;
+  final dynamic palette;
+  final VoidCallback onTap;
+
+  const _ThemeOptionCard({
+    super.key,
+    required this.name,
+    required this.isSelected,
+    required this.previewBg,
+    required this.previewAccent,
+    required this.palette,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isSelected ? palette.surfaceElevated : palette.surface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected ? palette.actionPrimary : palette.border,
+              width: isSelected ? 1.5 : 1.0,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: previewBg,
+                  border: Border.all(color: palette.border, width: 1),
+                ),
+                child: Center(
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: previewAccent,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: palette.textPrimary,
+                  ),
+                ),
+              ),
+              if (isSelected)
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 16,
+                  color: palette.actionPrimary,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SmallIconButton extends StatelessWidget {
   final IconData icon;
+  final dynamic palette;
   final VoidCallback? onPressed;
 
   const _SmallIconButton({
     required this.icon,
+    required this.palette,
     required this.onPressed,
   });
 
@@ -287,14 +420,14 @@ class _SmallIconButton extends StatelessWidget {
           width: 34,
           height: 34,
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: palette.surface,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: palette.border),
           ),
           child: Icon(
             icon,
             size: 16,
-            color: onPressed != null ? AppColors.textPrimary : AppColors.textTertiary,
+            color: onPressed != null ? palette.textPrimary : palette.textTertiary,
           ),
         ),
       ),

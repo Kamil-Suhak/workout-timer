@@ -13,13 +13,17 @@ class PhaseBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppColors.of(context);
+    final accent = phase.accentColorFor(palette);
+    final subtle = phase.subtleColorFor(palette);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: phase.subtleColor,
+        color: subtle,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: phase.accentColor.withValues(alpha: 0.35),
+          color: accent.withValues(alpha: 0.35),
           width: 1,
         ),
       ),
@@ -31,14 +35,14 @@ class PhaseBadge extends StatelessWidget {
             height: 7,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: phase.accentColor,
+              color: accent,
             ),
           ),
           const SizedBox(width: 8),
           Text(
             phase.displayName,
             style: AppTypography.phaseLabel.copyWith(
-              color: phase == WorkoutPhase.idle ? AppColors.textSecondary : phase.accentColor,
+              color: phase == WorkoutPhase.idle ? palette.textSecondary : accent,
             ),
           ),
         ],

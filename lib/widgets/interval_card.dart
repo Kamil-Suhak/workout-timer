@@ -23,12 +23,14 @@ class IntervalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppColors.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: palette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: palette.border),
       ),
       child: Row(
         children: [
@@ -51,12 +53,13 @@ class IntervalCard extends StatelessWidget {
                   style: AppTypography.cardCaption.copyWith(
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.2,
+                    color: palette.textTertiary,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   TimeFormatter.formatMinutesSeconds(duration),
-                  style: AppTypography.timerMedium,
+                  style: AppTypography.timerMedium.copyWith(color: palette.textPrimary),
                 ),
               ],
             ),
@@ -87,7 +90,9 @@ class _StepperButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppColors.of(context);
     final enabled = onPressed != null;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -97,16 +102,16 @@ class _StepperButton extends StatelessWidget {
           width: 38,
           height: 38,
           decoration: BoxDecoration(
-            color: enabled ? AppColors.surfaceElevated : AppColors.surface,
+            color: enabled ? palette.surfaceElevated : palette.surface,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: enabled ? AppColors.border : AppColors.borderSubtle,
+              color: enabled ? palette.border : palette.borderSubtle,
             ),
           ),
           child: Icon(
             icon,
             size: 18,
-            color: enabled ? AppColors.textPrimary : AppColors.textTertiary,
+            color: enabled ? palette.textPrimary : palette.textTertiary,
           ),
         ),
       ),

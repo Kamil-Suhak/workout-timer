@@ -19,6 +19,9 @@ class TimerCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppColors.of(context);
+    final accent = phase.accentColorFor(palette);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final diameter = math.min(constraints.maxWidth, constraints.maxHeight);
@@ -34,8 +37,8 @@ class TimerCircle extends StatelessWidget {
                 size: Size(safeDiameter, safeDiameter),
                 painter: _MinimalDialPainter(
                   progress: progress,
-                  accentColor: phase.accentColor,
-                  trackColor: AppColors.borderSubtle,
+                  accentColor: accent,
+                  trackColor: palette.borderSubtle,
                 ),
               ),
               Padding(
@@ -47,15 +50,15 @@ class TimerCircle extends StatelessWidget {
                     children: [
                       Text(
                         TimeFormatter.formatMinutesSeconds(remainingDuration),
-                        style: AppTypography.timerHuge,
+                        style: AppTypography.timerHuge.copyWith(color: palette.textPrimary),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         phase.displayName,
                         style: AppTypography.phaseLabel.copyWith(
                           color: phase == WorkoutPhase.idle
-                              ? AppColors.textTertiary
-                              : phase.accentColor,
+                              ? palette.textTertiary
+                              : accent,
                         ),
                       ),
                     ],

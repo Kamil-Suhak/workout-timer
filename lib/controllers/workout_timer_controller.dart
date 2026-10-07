@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import '../core/theme/app_theme_type.dart';
 import '../models/timer_settings.dart';
 import '../models/workout_phase.dart';
 import '../models/workout_preset.dart';
@@ -12,6 +13,7 @@ class WorkoutTimerController extends ChangeNotifier {
   WorkoutState _state;
   final AudioFeedbackService _audioService;
   final WakelockService _wakelockService;
+  AppThemeType _themeType;
   Timer? _ticker;
   DateTime? _phaseTargetTimestamp;
   int _lastPlayedCountdownSecond = -1;
@@ -20,15 +22,24 @@ class WorkoutTimerController extends ChangeNotifier {
     TimerSettings? settings,
     AudioFeedbackService? audioService,
     WakelockService? wakelockService,
+    AppThemeType? initialTheme,
   })  : _settings = settings ?? const TimerSettings(),
         _audioService = audioService ?? DefaultAudioFeedbackService(),
         _wakelockService = wakelockService ?? DefaultWakelockService(),
+        _themeType = initialTheme ?? AppThemeType.carbon,
         _state = WorkoutState.initial(
           initialWorkDuration: (settings ?? const TimerSettings()).workDuration,
         );
 
   TimerSettings get settings => _settings;
   WorkoutState get state => _state;
+  AppThemeType get themeType => _themeType;
+
+  void setTheme(AppThemeType type) {
+    if (_themeType == type) return;
+    _themeType = type;
+    notifyListeners();
+  }
 
   void updateSettings(TimerSettings newSettings) {
     if (_state.isRunning) return;
