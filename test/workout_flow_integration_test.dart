@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:workout_timer/controllers/workout_timer_controller.dart';
+import 'package:workout_timer/core/theme/app_theme_type.dart';
 import 'package:workout_timer/main.dart';
 import 'package:workout_timer/models/workout_phase.dart';
 import 'package:workout_timer/services/audio_feedback_service.dart';
@@ -63,6 +64,16 @@ void main() {
     expect(find.text('WORKOUT SETTINGS'), findsOneWidget);
     expect(find.text('Tabata Protocol'), findsOneWidget);
     expect(find.text('Boxing Rounds'), findsOneWidget);
+
+    // Test Theme Selector: switch to Pastel Rose and back
+    expect(find.byKey(const ValueKey('theme_pastel_rose')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('theme_pastel_rose')));
+    await tester.pumpAndSettle();
+    expect(controller.themeType, AppThemeType.pastelRose);
+
+    await tester.tap(find.byKey(const ValueKey('theme_carbon')));
+    await tester.pumpAndSettle();
+    expect(controller.themeType, AppThemeType.carbon);
 
     // 4. Select Tabata preset (20s work, 10s rest)
     await tester.tap(find.text('Tabata Protocol'));
