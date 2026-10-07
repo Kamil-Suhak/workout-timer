@@ -19,8 +19,8 @@ Uint8List generateWav({
   byteData.setUint8(2, 0x46); // 'F'
   byteData.setUint8(3, 0x46); // 'F'
   byteData.setUint32(4, chunkSize, Endian.little);
-  byteData.setUint8(8, 0x57);  // 'W'
-  byteData.setUint8(9, 0x41);  // 'A'
+  byteData.setUint8(8, 0x57); // 'W'
+  byteData.setUint8(9, 0x41); // 'A'
   byteData.setUint8(10, 0x56); // 'V'
   byteData.setUint8(11, 0x45); // 'E'
 
@@ -30,11 +30,15 @@ Uint8List generateWav({
   byteData.setUint8(14, 0x74); // 't'
   byteData.setUint8(15, 0x20); // ' '
   byteData.setUint32(16, 16, Endian.little); // Subchunk1Size (16 for PCM)
-  byteData.setUint16(20, 1, Endian.little);  // AudioFormat (1 = PCM)
-  byteData.setUint16(22, 1, Endian.little);  // NumChannels (1 = mono)
+  byteData.setUint16(20, 1, Endian.little); // AudioFormat (1 = PCM)
+  byteData.setUint16(22, 1, Endian.little); // NumChannels (1 = mono)
   byteData.setUint32(24, sampleRate, Endian.little); // SampleRate
-  byteData.setUint32(28, sampleRate * 2, Endian.little); // ByteRate (SampleRate * 1 * 2)
-  byteData.setUint16(32, 2, Endian.little);  // BlockAlign
+  byteData.setUint32(
+    28,
+    sampleRate * 2,
+    Endian.little,
+  ); // ByteRate (SampleRate * 1 * 2)
+  byteData.setUint16(32, 2, Endian.little); // BlockAlign
   byteData.setUint16(34, 16, Endian.little); // BitsPerSample
 
   // data Subchunk
@@ -83,7 +87,9 @@ void main() {
       final freq = t < 0.12 ? 587.33 : 880.0;
       final localT = t < 0.12 ? t : (t - 0.12);
       final envelope = math.exp(-localT * 12);
-      return (math.sin(2 * math.pi * freq * t) + 0.3 * math.sin(2 * math.pi * freq * 2 * t)) * envelope;
+      return (math.sin(2 * math.pi * freq * t) +
+              0.3 * math.sin(2 * math.pi * freq * 2 * t)) *
+          envelope;
     },
   );
   File('assets/audio/phase_change.wav').writeAsBytesSync(phaseWav);
@@ -100,5 +106,4 @@ void main() {
     },
   );
   File('assets/audio/complete.wav').writeAsBytesSync(completeWav);
-
 }

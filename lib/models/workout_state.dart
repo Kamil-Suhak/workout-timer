@@ -19,9 +19,7 @@ class WorkoutState {
     required this.isPaused,
   });
 
-  factory WorkoutState.initial({
-    required Duration initialWorkDuration,
-  }) {
+  factory WorkoutState.initial({required Duration initialWorkDuration}) {
     return WorkoutState(
       phase: WorkoutPhase.idle,
       currentSet: 1,
@@ -35,7 +33,8 @@ class WorkoutState {
 
   double get progress {
     if (phaseDuration.inMilliseconds == 0) return 0.0;
-    final elapsed = phaseDuration.inMilliseconds - remainingDuration.inMilliseconds;
+    final elapsed =
+        phaseDuration.inMilliseconds - remainingDuration.inMilliseconds;
     return (elapsed / phaseDuration.inMilliseconds).clamp(0.0, 1.0);
   }
 

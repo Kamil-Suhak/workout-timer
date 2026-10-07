@@ -11,8 +11,5 @@ enum AppThemeType {
   final String displayName;
   final String description;
 
-  const AppThemeType({
-    required this.displayName,
-    required this.description,
-  });
+  const AppThemeType({required this.displayName, required this.description});
 }

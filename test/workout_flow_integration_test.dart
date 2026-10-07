@@ -16,17 +16,26 @@ class TestAudioFeedbackService implements AudioFeedbackService {
   Future<void> init() async {}
 
   @override
-  Future<void> playCountdownTick({bool sound = true, bool vibration = true}) async {
+  Future<void> playCountdownTick({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     countdownTicks++;
   }
 
   @override
-  Future<void> playPhaseChange({bool sound = true, bool vibration = true}) async {
+  Future<void> playPhaseChange({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     phaseChanges++;
   }
 
   @override
-  Future<void> playWorkoutComplete({bool sound = true, bool vibration = true}) async {
+  Future<void> playWorkoutComplete({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     completions++;
   }
 
@@ -35,7 +44,9 @@ class TestAudioFeedbackService implements AudioFeedbackService {
 }
 
 void main() {
-  testWidgets('Complete workout lifecycle integration test', (WidgetTester tester) async {
+  testWidgets('Complete workout lifecycle integration test', (
+    WidgetTester tester,
+  ) async {
     final mockAudio = TestAudioFeedbackService();
     final mockWakelock = NoopWakelockService();
     final controller = WorkoutTimerController(

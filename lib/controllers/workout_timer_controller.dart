@@ -23,13 +23,13 @@ class WorkoutTimerController extends ChangeNotifier {
     AudioFeedbackService? audioService,
     WakelockService? wakelockService,
     AppThemeType? initialTheme,
-  })  : _settings = settings ?? const TimerSettings(),
-        _audioService = audioService ?? DefaultAudioFeedbackService(),
-        _wakelockService = wakelockService ?? DefaultWakelockService(),
-        _themeType = initialTheme ?? AppThemeType.carbon,
-        _state = WorkoutState.initial(
-          initialWorkDuration: (settings ?? const TimerSettings()).workDuration,
-        );
+  }) : _settings = settings ?? const TimerSettings(),
+       _audioService = audioService ?? DefaultAudioFeedbackService(),
+       _wakelockService = wakelockService ?? DefaultWakelockService(),
+       _themeType = initialTheme ?? AppThemeType.carbon,
+       _state = WorkoutState.initial(
+         initialWorkDuration: (settings ?? const TimerSettings()).workDuration,
+       );
 
   TimerSettings get settings => _settings;
   WorkoutState get state => _state;
@@ -45,7 +45,9 @@ class WorkoutTimerController extends ChangeNotifier {
     if (_state.isRunning) return;
     _settings = newSettings;
     if (_state.phase == WorkoutPhase.idle) {
-      _state = WorkoutState.initial(initialWorkDuration: _settings.workDuration);
+      _state = WorkoutState.initial(
+        initialWorkDuration: _settings.workDuration,
+      );
     }
     notifyListeners();
   }
@@ -61,14 +63,17 @@ class WorkoutTimerController extends ChangeNotifier {
   }
 
   void toggleVibration() {
-    _settings = _settings.copyWith(vibrationEnabled: !_settings.vibrationEnabled);
+    _settings = _settings.copyWith(
+      vibrationEnabled: !_settings.vibrationEnabled,
+    );
     notifyListeners();
   }
 
   void adjustWorkDuration(Duration delta) {
     if (_state.isRunning) return;
     final newDuration = _settings.workDuration + delta;
-    if (newDuration < const Duration(seconds: 5) || newDuration > const Duration(minutes: 60)) {
+    if (newDuration < const Duration(seconds: 5) ||
+        newDuration > const Duration(minutes: 60)) {
       return;
     }
     _settings = _settings.copyWith(workDuration: newDuration);
@@ -84,7 +89,8 @@ class WorkoutTimerController extends ChangeNotifier {
   void adjustRestDuration(Duration delta) {
     if (_state.isRunning) return;
     final newDuration = _settings.restDuration + delta;
-    if (newDuration < const Duration(seconds: 5) || newDuration > const Duration(minutes: 60)) {
+    if (newDuration < const Duration(seconds: 5) ||
+        newDuration > const Duration(minutes: 60)) {
       return;
     }
     _settings = _settings.copyWith(restDuration: newDuration);
@@ -155,7 +161,9 @@ class WorkoutTimerController extends ChangeNotifier {
     if (_phaseTargetTimestamp != null) {
       final remaining = _phaseTargetTimestamp!.difference(DateTime.now());
       _state = _state.copyWith(
-        remainingDuration: remaining > Duration.zero ? remaining : Duration.zero,
+        remainingDuration: remaining > Duration.zero
+            ? remaining
+            : Duration.zero,
         isPaused: true,
       );
     } else {
@@ -180,7 +188,8 @@ class WorkoutTimerController extends ChangeNotifier {
   }
 
   void syncWithWallClock() {
-    if (!_state.isRunning || _state.isPaused || _phaseTargetTimestamp == null) return;
+    if (!_state.isRunning || _state.isPaused || _phaseTargetTimestamp == null)
+      return;
     _evaluateTick();
   }
 
@@ -200,7 +209,9 @@ class WorkoutTimerController extends ChangeNotifier {
       _transitionToNextPhase();
     } else {
       final secondsLeft = difference.inSeconds;
-      if (secondsLeft <= 3 && secondsLeft > 0 && secondsLeft != _lastPlayedCountdownSecond) {
+      if (secondsLeft <= 3 &&
+          secondsLeft > 0 &&
+          secondsLeft != _lastPlayedCountdownSecond) {
         _lastPlayedCountdownSecond = secondsLeft;
         _audioService.playCountdownTick(
           sound: _settings.soundEnabled,
@@ -233,7 +244,8 @@ class WorkoutTimerController extends ChangeNotifier {
       );
     } else if (_state.phase == WorkoutPhase.work) {
       // Work -> Rest (or Finished if last set and no rest needed)
-      if (_state.currentSet >= _settings.totalSets && _settings.restDuration == Duration.zero) {
+      if (_state.currentSet >= _settings.totalSets &&
+          _settings.restDuration == Duration.zero) {
         _completeWorkout();
         return;
       }

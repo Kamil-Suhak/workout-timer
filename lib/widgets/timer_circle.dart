@@ -25,7 +25,9 @@ class TimerCircle extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final diameter = math.min(constraints.maxWidth, constraints.maxHeight);
-        final safeDiameter = diameter.isFinite && diameter > 0 ? diameter : 260.0;
+        final safeDiameter = diameter.isFinite && diameter > 0
+            ? diameter
+            : 260.0;
 
         return SizedBox(
           width: safeDiameter,
@@ -50,7 +52,9 @@ class TimerCircle extends StatelessWidget {
                     children: [
                       Text(
                         TimeFormatter.formatMinutesSeconds(remainingDuration),
-                        style: AppTypography.timerHuge.copyWith(color: palette.textPrimary),
+                        style: AppTypography.timerHuge.copyWith(
+                          color: palette.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(

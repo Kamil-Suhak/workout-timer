@@ -85,13 +85,13 @@ class AppPalette extends ThemeExtension<AppPalette> {
     textPrimary: Color(0xFF2D2325),
     textSecondary: Color(0xFF7A6A6E),
     textTertiary: Color(0xFFA8989C),
-    work: Color(0xFFD9777F),        // Soft dusty rose (calm, zero neon)
+    work: Color(0xFFD9777F), // Soft dusty rose (calm, zero neon)
     workSubtle: Color(0x24D9777F),
-    rest: Color(0xFF7FA498),        // Muted sea salt sage
+    rest: Color(0xFF7FA498), // Muted sea salt sage
     restSubtle: Color(0x247FA498),
-    prepare: Color(0xFFD1A176),     // Warm sand / biscuit
+    prepare: Color(0xFFD1A176), // Warm sand / biscuit
     prepareSubtle: Color(0x24D1A176),
-    complete: Color(0xFF9F8AB0),    // Muted heather lilac
+    complete: Color(0xFF9F8AB0), // Muted heather lilac
     completeSubtle: Color(0x249F8AB0),
     actionPrimary: Color(0xFFD9777F),
     actionPrimaryText: Color(0xFFFFFFFF),
@@ -161,7 +161,10 @@ class AppPalette extends ThemeExtension<AppPalette> {
   }
 
   @override
-  ThemeExtension<AppPalette> lerp(covariant ThemeExtension<AppPalette>? other, double t) {
+  ThemeExtension<AppPalette> lerp(
+    covariant ThemeExtension<AppPalette>? other,
+    double t,
+  ) {
     if (other is! AppPalette) return this;
     return AppPalette(
       themeType: t < 0.5 ? themeType : other.themeType,
@@ -182,9 +185,17 @@ class AppPalette extends ThemeExtension<AppPalette> {
       complete: Color.lerp(complete, other.complete, t)!,
       completeSubtle: Color.lerp(completeSubtle, other.completeSubtle, t)!,
       actionPrimary: Color.lerp(actionPrimary, other.actionPrimary, t)!,
-      actionPrimaryText: Color.lerp(actionPrimaryText, other.actionPrimaryText, t)!,
+      actionPrimaryText: Color.lerp(
+        actionPrimaryText,
+        other.actionPrimaryText,
+        t,
+      )!,
       actionSecondary: Color.lerp(actionSecondary, other.actionSecondary, t)!,
-      actionSecondaryText: Color.lerp(actionSecondaryText, other.actionSecondaryText, t)!,
+      actionSecondaryText: Color.lerp(
+        actionSecondaryText,
+        other.actionSecondaryText,
+        t,
+      )!,
       brightness: t < 0.5 ? brightness : other.brightness,
     );
   }

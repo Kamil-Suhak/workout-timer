@@ -42,14 +42,20 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
   }
 
   @override
-  Future<void> playCountdownTick({bool sound = true, bool vibration = true}) async {
+  Future<void> playCountdownTick({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     if (vibration) {
       await HapticFeedback.selectionClick();
     }
     if (sound) {
       try {
         await _player.stop();
-        await _player.play(AssetSource('audio/tick.wav'), mode: PlayerMode.lowLatency);
+        await _player.play(
+          AssetSource('audio/tick.wav'),
+          mode: PlayerMode.lowLatency,
+        );
       } catch (_) {
         await SystemSound.play(SystemSoundType.click);
       }
@@ -57,14 +63,20 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
   }
 
   @override
-  Future<void> playPhaseChange({bool sound = true, bool vibration = true}) async {
+  Future<void> playPhaseChange({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     if (vibration) {
       await HapticFeedback.heavyImpact();
     }
     if (sound) {
       try {
         await _player.stop();
-        await _player.play(AssetSource('audio/phase_change.wav'), mode: PlayerMode.lowLatency);
+        await _player.play(
+          AssetSource('audio/phase_change.wav'),
+          mode: PlayerMode.lowLatency,
+        );
       } catch (_) {
         await SystemSound.play(SystemSoundType.alert);
       }
@@ -72,7 +84,10 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
   }
 
   @override
-  Future<void> playWorkoutComplete({bool sound = true, bool vibration = true}) async {
+  Future<void> playWorkoutComplete({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     if (vibration) {
       await HapticFeedback.mediumImpact();
       await Future.delayed(const Duration(milliseconds: 120));
@@ -81,7 +96,10 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
     if (sound) {
       try {
         await _player.stop();
-        await _player.play(AssetSource('audio/complete.wav'), mode: PlayerMode.lowLatency);
+        await _player.play(
+          AssetSource('audio/complete.wav'),
+          mode: PlayerMode.lowLatency,
+        );
       } catch (_) {
         await SystemSound.play(SystemSoundType.alert);
       }

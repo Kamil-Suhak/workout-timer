@@ -59,7 +59,9 @@ class IntervalCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   TimeFormatter.formatMinutesSeconds(duration),
-                  style: AppTypography.timerMedium.copyWith(color: palette.textPrimary),
+                  style: AppTypography.timerMedium.copyWith(
+                    color: palette.textPrimary,
+                  ),
                 ),
               ],
             ),
@@ -83,10 +85,7 @@ class _StepperButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
 
-  const _StepperButton({
-    required this.icon,
-    required this.onPressed,
-  });
+  const _StepperButton({required this.icon, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

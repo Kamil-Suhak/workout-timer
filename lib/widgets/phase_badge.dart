@@ -6,10 +6,7 @@ import '../core/theme/app_typography.dart';
 class PhaseBadge extends StatelessWidget {
   final WorkoutPhase phase;
 
-  const PhaseBadge({
-    super.key,
-    required this.phase,
-  });
+  const PhaseBadge({super.key, required this.phase});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +19,7 @@ class PhaseBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: subtle,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: accent.withValues(alpha: 0.35),
-          width: 1,
-        ),
+        border: Border.all(color: accent.withValues(alpha: 0.35), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -33,16 +27,15 @@ class PhaseBadge extends StatelessWidget {
           Container(
             width: 7,
             height: 7,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: accent,
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: accent),
           ),
           const SizedBox(width: 8),
           Text(
             phase.displayName,
             style: AppTypography.phaseLabel.copyWith(
-              color: phase == WorkoutPhase.idle ? palette.textSecondary : accent,
+              color: phase == WorkoutPhase.idle
+                  ? palette.textSecondary
+                  : accent,
             ),
           ),
         ],

@@ -16,17 +16,26 @@ class MockAudioFeedbackService implements AudioFeedbackService {
   Future<void> init() async {}
 
   @override
-  Future<void> playCountdownTick({bool sound = true, bool vibration = true}) async {
+  Future<void> playCountdownTick({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     countdownTickCalls++;
   }
 
   @override
-  Future<void> playPhaseChange({bool sound = true, bool vibration = true}) async {
+  Future<void> playPhaseChange({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     phaseChangeCalls++;
   }
 
   @override
-  Future<void> playWorkoutComplete({bool sound = true, bool vibration = true}) async {
+  Future<void> playWorkoutComplete({
+    bool sound = true,
+    bool vibration = true,
+  }) async {
     completedCalls++;
   }
 
@@ -83,15 +92,30 @@ void main() {
       expect(controller.state.isRunning, false);
     });
 
-    test('adjustWorkDuration modifies work duration and updates idle remaining', () {
-      controller.adjustWorkDuration(const Duration(seconds: 30));
-      expect(controller.settings.workDuration, const Duration(minutes: 2, seconds: 30));
-      expect(controller.state.remainingDuration, const Duration(minutes: 2, seconds: 30));
+    test(
+      'adjustWorkDuration modifies work duration and updates idle remaining',
+      () {
+        controller.adjustWorkDuration(const Duration(seconds: 30));
+        expect(
+          controller.settings.workDuration,
+          const Duration(minutes: 2, seconds: 30),
+        );
+        expect(
+          controller.state.remainingDuration,
+          const Duration(minutes: 2, seconds: 30),
+        );
 
-      controller.adjustWorkDuration(const Duration(seconds: -45));
-      expect(controller.settings.workDuration, const Duration(minutes: 1, seconds: 45));
-      expect(controller.state.remainingDuration, const Duration(minutes: 1, seconds: 45));
-    });
+        controller.adjustWorkDuration(const Duration(seconds: -45));
+        expect(
+          controller.settings.workDuration,
+          const Duration(minutes: 1, seconds: 45),
+        );
+        expect(
+          controller.state.remainingDuration,
+          const Duration(minutes: 1, seconds: 45),
+        );
+      },
+    );
 
     test('adjustRestDuration modifies rest duration', () {
       controller.adjustRestDuration(const Duration(seconds: 10));

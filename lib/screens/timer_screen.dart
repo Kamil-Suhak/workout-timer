@@ -11,10 +11,7 @@ import '../widgets/timer_circle.dart';
 class TimerScreen extends StatefulWidget {
   final WorkoutTimerController? controller;
 
-  const TimerScreen({
-    super.key,
-    this.controller,
-  });
+  const TimerScreen({super.key, this.controller});
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -60,7 +57,10 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
             final settings = _controller.settings;
 
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 16.0,
+              ),
               child: Column(
                 children: [
                   // Top navigation & set indicator
@@ -98,7 +98,8 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                               size: 20,
                               color: palette.textSecondary,
                             ),
-                            onPressed: () => SettingsSheet.show(context, _controller),
+                            onPressed: () =>
+                                SettingsSheet.show(context, _controller),
                             tooltip: 'Settings & Presets',
                           ),
                         ],
@@ -126,8 +127,12 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                     duration: settings.workDuration,
                     accentColor: palette.work,
                     isEnabled: !state.isRunning,
-                    onIncrement: () => _controller.adjustWorkDuration(const Duration(seconds: 15)),
-                    onDecrement: () => _controller.adjustWorkDuration(const Duration(seconds: -15)),
+                    onIncrement: () => _controller.adjustWorkDuration(
+                      const Duration(seconds: 15),
+                    ),
+                    onDecrement: () => _controller.adjustWorkDuration(
+                      const Duration(seconds: -15),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   IntervalCard(
@@ -135,8 +140,12 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                     duration: settings.restDuration,
                     accentColor: palette.rest,
                     isEnabled: !state.isRunning,
-                    onIncrement: () => _controller.adjustRestDuration(const Duration(seconds: 5)),
-                    onDecrement: () => _controller.adjustRestDuration(const Duration(seconds: -5)),
+                    onIncrement: () => _controller.adjustRestDuration(
+                      const Duration(seconds: 5),
+                    ),
+                    onDecrement: () => _controller.adjustRestDuration(
+                      const Duration(seconds: -5),
+                    ),
                   ),
 
                   const SizedBox(height: 28),
@@ -165,7 +174,8 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                       ],
 
                       // Skip Phase Button (Visible while workout is running)
-                      if (state.isRunning && state.phase != WorkoutPhase.completed) ...[
+                      if (state.isRunning &&
+                          state.phase != WorkoutPhase.completed) ...[
                         IconButton.filled(
                           key: const ValueKey('skip_button'),
                           onPressed: _controller.skipToNextPhase,
@@ -216,8 +226,10 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                             state.phase == WorkoutPhase.completed
                                 ? 'START NEW WORKOUT'
                                 : (state.isRunning && !state.isPaused
-                                    ? 'PAUSE'
-                                    : (state.isPaused ? 'RESUME' : 'START WORKOUT')),
+                                      ? 'PAUSE'
+                                      : (state.isPaused
+                                            ? 'RESUME'
+                                            : 'START WORKOUT')),
                             style: AppTypography.buttonText.copyWith(
                               letterSpacing: 1.5,
                               color: state.isRunning && !state.isPaused

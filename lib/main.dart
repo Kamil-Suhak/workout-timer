@@ -18,10 +18,7 @@ void main() {
 class WorkoutTimerApp extends StatefulWidget {
   final WorkoutTimerController? controller;
 
-  const WorkoutTimerApp({
-    super.key,
-    this.controller,
-  });
+  const WorkoutTimerApp({super.key, this.controller});
 
   @override
   State<WorkoutTimerApp> createState() => _WorkoutTimerAppState();

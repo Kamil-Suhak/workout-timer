@@ -8,12 +8,12 @@ import '../models/workout_preset.dart';
 class SettingsSheet extends StatelessWidget {
   final WorkoutTimerController controller;
 
-  const SettingsSheet({
-    super.key,
-    required this.controller,
-  });
+  const SettingsSheet({super.key, required this.controller});
 
-  static Future<void> show(BuildContext context, WorkoutTimerController controller) {
+  static Future<void> show(
+    BuildContext context,
+    WorkoutTimerController controller,
+  ) {
     final palette = AppColors.of(context);
 
     return showModalBottomSheet(
@@ -75,7 +75,11 @@ class SettingsSheet extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close, size: 20, color: palette.textSecondary),
+                      icon: Icon(
+                        Icons.close,
+                        size: 20,
+                        color: palette.textSecondary,
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
@@ -109,11 +113,13 @@ class SettingsSheet extends StatelessWidget {
                       child: _ThemeOptionCard(
                         key: const ValueKey('theme_pastel_rose'),
                         name: 'Pastel Rose',
-                        isSelected: controller.themeType == AppThemeType.pastelRose,
+                        isSelected:
+                            controller.themeType == AppThemeType.pastelRose,
                         previewBg: const Color(0xFFFAF4F5),
                         previewAccent: const Color(0xFFD9777F),
                         palette: palette,
-                        onTap: () => controller.setTheme(AppThemeType.pastelRose),
+                        onTap: () =>
+                            controller.setTheme(AppThemeType.pastelRose),
                       ),
                     ),
                   ],
@@ -133,8 +139,11 @@ class SettingsSheet extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: WorkoutPreset.defaultPresets.map((preset) {
-                      final isSelected = settings.workDuration == preset.settings.workDuration &&
-                          settings.restDuration == preset.settings.restDuration &&
+                      final isSelected =
+                          settings.workDuration ==
+                              preset.settings.workDuration &&
+                          settings.restDuration ==
+                              preset.settings.restDuration &&
                           settings.totalSets == preset.settings.totalSets;
 
                       return Padding(
@@ -150,12 +159,16 @@ class SettingsSheet extends StatelessWidget {
                           backgroundColor: palette.surfaceElevated,
                           selectedColor: palette.actionPrimary,
                           labelStyle: TextStyle(
-                            color: isSelected ? palette.actionPrimaryText : palette.textPrimary,
+                            color: isSelected
+                                ? palette.actionPrimaryText
+                                : palette.textPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
                           side: BorderSide(
-                            color: isSelected ? palette.actionPrimary : palette.border,
+                            color: isSelected
+                                ? palette.actionPrimary
+                                : palette.border,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -184,12 +197,16 @@ class SettingsSheet extends StatelessWidget {
                         children: [
                           Text(
                             'Total Sets',
-                            style: AppTypography.cardTitle.copyWith(color: palette.textPrimary),
+                            style: AppTypography.cardTitle.copyWith(
+                              color: palette.textPrimary,
+                            ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'Number of alternating cycles',
-                            style: AppTypography.cardCaption.copyWith(color: palette.textTertiary),
+                            style: AppTypography.cardCaption.copyWith(
+                              color: palette.textTertiary,
+                            ),
                           ),
                         ],
                       ),
@@ -203,7 +220,9 @@ class SettingsSheet extends StatelessWidget {
                                 : null,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14.0,
+                            ),
                             child: Text(
                               '${settings.totalSets}',
                               style: AppTypography.timerMedium.copyWith(
@@ -242,12 +261,16 @@ class SettingsSheet extends StatelessWidget {
                         children: [
                           Text(
                             'Preparation Timer',
-                            style: AppTypography.cardTitle.copyWith(color: palette.textPrimary),
+                            style: AppTypography.cardTitle.copyWith(
+                              color: palette.textPrimary,
+                            ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'Countdown before set 1 begins',
-                            style: AppTypography.cardCaption.copyWith(color: palette.textTertiary),
+                            style: AppTypography.cardCaption.copyWith(
+                              color: palette.textTertiary,
+                            ),
                           ),
                         ],
                       ),
@@ -255,13 +278,20 @@ class SettingsSheet extends StatelessWidget {
                         value: settings.prepareDuration.inSeconds,
                         dropdownColor: palette.surfaceElevated,
                         underline: const SizedBox.shrink(),
-                        icon: Icon(Icons.arrow_drop_down, color: palette.textSecondary),
-                        style: AppTypography.buttonText.copyWith(color: palette.textPrimary),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: palette.textSecondary,
+                        ),
+                        style: AppTypography.buttonText.copyWith(
+                          color: palette.textPrimary,
+                        ),
                         onChanged: isRunning
                             ? null
                             : (seconds) {
                                 if (seconds != null) {
-                                  controller.setPrepareDuration(Duration(seconds: seconds));
+                                  controller.setPrepareDuration(
+                                    Duration(seconds: seconds),
+                                  );
                                 }
                               },
                         items: const [
@@ -284,13 +314,26 @@ class SettingsSheet extends StatelessWidget {
                     side: BorderSide(color: palette.border),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: Column(
                       children: [
                         SwitchListTile.adaptive(
                           contentPadding: EdgeInsets.zero,
-                          title: Text('Sound Cues', style: AppTypography.cardTitle.copyWith(color: palette.textPrimary)),
-                          subtitle: Text('Pings and transition chimes', style: AppTypography.cardCaption.copyWith(color: palette.textTertiary)),
+                          title: Text(
+                            'Sound Cues',
+                            style: AppTypography.cardTitle.copyWith(
+                              color: palette.textPrimary,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Pings and transition chimes',
+                            style: AppTypography.cardCaption.copyWith(
+                              color: palette.textTertiary,
+                            ),
+                          ),
                           value: settings.soundEnabled,
                           activeTrackColor: palette.actionPrimary,
                           onChanged: (_) => controller.toggleSound(),
@@ -298,8 +341,18 @@ class SettingsSheet extends StatelessWidget {
                         Divider(height: 1, color: palette.borderSubtle),
                         SwitchListTile.adaptive(
                           contentPadding: EdgeInsets.zero,
-                          title: Text('Haptic Feedback', style: AppTypography.cardTitle.copyWith(color: palette.textPrimary)),
-                          subtitle: Text('Tactile vibration on transitions', style: AppTypography.cardCaption.copyWith(color: palette.textTertiary)),
+                          title: Text(
+                            'Haptic Feedback',
+                            style: AppTypography.cardTitle.copyWith(
+                              color: palette.textPrimary,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Tactile vibration on transitions',
+                            style: AppTypography.cardCaption.copyWith(
+                              color: palette.textTertiary,
+                            ),
+                          ),
                           value: settings.vibrationEnabled,
                           activeTrackColor: palette.actionPrimary,
                           onChanged: (_) => controller.toggleVibration(),
@@ -427,7 +480,9 @@ class _SmallIconButton extends StatelessWidget {
           child: Icon(
             icon,
             size: 16,
-            color: onPressed != null ? palette.textPrimary : palette.textTertiary,
+            color: onPressed != null
+                ? palette.textPrimary
+                : palette.textTertiary,
           ),
         ),
       ),
