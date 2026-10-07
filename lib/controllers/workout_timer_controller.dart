@@ -188,8 +188,9 @@ class WorkoutTimerController extends ChangeNotifier {
   }
 
   void syncWithWallClock() {
-    if (!_state.isRunning || _state.isPaused || _phaseTargetTimestamp == null)
+    if (!_state.isRunning || _state.isPaused || _phaseTargetTimestamp == null) {
       return;
+    }
     _evaluateTick();
   }
 
