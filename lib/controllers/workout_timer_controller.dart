@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../core/theme/app_theme_type.dart';
 import '../models/timer_settings.dart';
 import '../models/workout_phase.dart';
-import '../models/workout_preset.dart';
 import '../models/workout_state.dart';
 import '../services/audio_feedback_service.dart';
 import '../services/wakelock_service.dart';
@@ -50,11 +49,6 @@ class WorkoutTimerController extends ChangeNotifier {
       );
     }
     notifyListeners();
-  }
-
-  void applyPreset(WorkoutPreset preset) {
-    if (_state.isRunning) return;
-    updateSettings(preset.settings);
   }
 
   void toggleSound() {

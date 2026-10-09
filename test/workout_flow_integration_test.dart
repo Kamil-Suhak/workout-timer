@@ -65,7 +65,7 @@ void main() {
     expect(find.text('00:15'), findsOneWidget);
     expect(find.text('START WORKOUT'), findsOneWidget);
 
-    // 3. Open Settings & Presets Sheet
+    // 3. Open Settings Sheet
     final settingsButton = find.byKey(const ValueKey('settings_button'));
     expect(settingsButton, findsOneWidget);
     await tester.tap(settingsButton);
@@ -73,8 +73,7 @@ void main() {
 
     // Verify settings sheet opened
     expect(find.text('WORKOUT SETTINGS'), findsOneWidget);
-    expect(find.text('Tabata Protocol'), findsOneWidget);
-    expect(find.text('Boxing Rounds'), findsOneWidget);
+    expect(find.text('Total Sets'), findsOneWidget);
 
     // Test Theme Selector: switch to Pastel Rose and back
     expect(find.byKey(const ValueKey('theme_pastel_rose')), findsOneWidget);
@@ -86,27 +85,28 @@ void main() {
     await tester.pumpAndSettle();
     expect(controller.themeType, AppThemeType.carbon);
 
-    // 4. Select Tabata preset (20s work, 10s rest)
-    await tester.tap(find.text('Tabata Protocol'));
+    // 4. Test manual adjustment of Total Sets in Settings Sheet
+    final addSetButton = find.descendant(
+      of: find.byType(BottomSheet),
+      matching: find.byIcon(Icons.add),
+    );
+    await tester.tap(addSetButton);
     await tester.pumpAndSettle();
-
-    // Verify controller settings updated
-    expect(controller.settings.workDuration, const Duration(seconds: 20));
-    expect(controller.settings.restDuration, const Duration(seconds: 10));
+    expect(controller.settings.totalSets, 9);
 
     // Close settings sheet
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
 
-    // 5. Verify timer display updated to Tabata work duration (00:20)
-    expect(find.text('00:20'), findsWidgets);
-    expect(find.text('00:10'), findsOneWidget);
+    // 5. Verify timer display on home screen
+    expect(find.text('02:00'), findsWidgets);
+    expect(find.text('00:15'), findsOneWidget);
 
     // 6. Test +/- interval adjustment on home screen
     final exerciseAddButton = find.byIcon(Icons.add).first;
     await tester.tap(exerciseAddButton);
     await tester.pumpAndSettle();
-    expect(find.text('00:35'), findsWidgets); // 20s + 15s = 35s
+    expect(find.text('02:15'), findsWidgets); // 2m + 15s = 2m 15s
 
     // 7. Start workout
     final playPauseButton = find.byKey(const ValueKey('play_pause_button'));

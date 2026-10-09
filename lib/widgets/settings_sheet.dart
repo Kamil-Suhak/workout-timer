@@ -3,7 +3,6 @@ import '../controllers/workout_timer_controller.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_theme_type.dart';
 import '../core/theme/app_typography.dart';
-import '../models/workout_preset.dart';
 
 class SettingsSheet extends StatelessWidget {
   final WorkoutTimerController controller;
@@ -123,61 +122,6 @@ class SettingsSheet extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 24),
-
-                // Section 2: Presets
-                Text(
-                  'PRESETS',
-                  style: AppTypography.cardCaption.copyWith(
-                    color: palette.textTertiary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: WorkoutPreset.defaultPresets.map((preset) {
-                      final isSelected =
-                          settings.workDuration ==
-                              preset.settings.workDuration &&
-                          settings.restDuration ==
-                              preset.settings.restDuration &&
-                          settings.totalSets == preset.settings.totalSets;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ChoiceChip(
-                          label: Text(preset.name),
-                          selected: isSelected,
-                          onSelected: isRunning
-                              ? null
-                              : (_) {
-                                  controller.applyPreset(preset);
-                                },
-                          backgroundColor: palette.surfaceElevated,
-                          selectedColor: palette.actionPrimary,
-                          labelStyle: TextStyle(
-                            color: isSelected
-                                ? palette.actionPrimaryText
-                                : palette.textPrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                          side: BorderSide(
-                            color: isSelected
-                                ? palette.actionPrimary
-                                : palette.border,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          showCheckmark: false,
-                        ),
-                      );
-                    }).toList(),
-                  ),
                 ),
                 const SizedBox(height: 24),
 

@@ -100,7 +100,7 @@ class _TimerScreenState extends State<TimerScreen> with WidgetsBindingObserver {
                             ),
                             onPressed: () =>
                                 SettingsSheet.show(context, _controller),
-                            tooltip: 'Settings & Presets',
+                            tooltip: 'Settings',
                           ),
                         ],
                       ),
