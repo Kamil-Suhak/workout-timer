@@ -41,13 +41,45 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
     }
   }
 
+  static const MethodChannel _vibrationChannel = MethodChannel(
+    'com.example.workout_timer/vibration',
+  );
+
+  Future<void> _vibrate({
+    required int durationMs,
+    required int amplitude,
+  }) async {
+    try {
+      await _vibrationChannel.invokeMethod('vibrate', {
+        'duration': durationMs,
+        'amplitude': amplitude,
+      });
+    } catch (_) {
+      await HapticFeedback.mediumImpact();
+    }
+  }
+
+  Future<void> _vibratePattern({
+    required List<int> timings,
+    required List<int> amplitudes,
+  }) async {
+    try {
+      await _vibrationChannel.invokeMethod('vibratePattern', {
+        'timings': timings,
+        'amplitudes': amplitudes,
+      });
+    } catch (_) {
+      await HapticFeedback.heavyImpact();
+    }
+  }
+
   @override
   Future<void> playCountdownTick({
     bool sound = true,
     bool vibration = true,
   }) async {
     if (vibration) {
-      await HapticFeedback.selectionClick();
+      await _vibrate(durationMs: 70, amplitude: 180);
     }
     if (sound) {
       try {
@@ -68,7 +100,7 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
     bool vibration = true,
   }) async {
     if (vibration) {
-      await HapticFeedback.heavyImpact();
+      await _vibrate(durationMs: 350, amplitude: 255);
     }
     if (sound) {
       try {
@@ -89,9 +121,10 @@ class DefaultAudioFeedbackService implements AudioFeedbackService {
     bool vibration = true,
   }) async {
     if (vibration) {
-      await HapticFeedback.mediumImpact();
-      await Future.delayed(const Duration(milliseconds: 120));
-      await HapticFeedback.heavyImpact();
+      await _vibratePattern(
+        timings: const [0, 200, 150, 450],
+        amplitudes: const [0, 220, 0, 255],
+      );
     }
     if (sound) {
       try {
