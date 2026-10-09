@@ -4,6 +4,22 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag (e.g., v1.0.1)'
+        required: true
+        type: string
+      draft:
+        description: 'Create as draft release'
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        description: 'Create as prerelease'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -13,6 +29,8 @@ jobs:
     name: Build APK & Create Release
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    env:
+      RELEASE_TAG: ${{ inputs.tag_name || github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -43,13 +61,14 @@ jobs:
         run: flutter build apk --release
 
       - name: Stage Release Artifact
-        run: cp build/app/outputs/flutter-apk/app-release.apk workout-timer-${{ github.ref_name }}.apk
+        run: cp build/app/outputs/flutter-apk/app-release.apk workout-timer-${{ env.RELEASE_TAG }}.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          name: Workout Timer ${{ github.ref_name }}
-          files: workout-timer-${{ github.ref_name }}.apk
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Workout Timer ${{ env.RELEASE_TAG }}
+          files: workout-timer-${{ env.RELEASE_TAG }}.apk
           generate_release_notes: true
-          draft: false
-          prerelease: false
+          draft: ${{ inputs.draft || false }}
+          prerelease: ${{ inputs.prerelease || false }}
